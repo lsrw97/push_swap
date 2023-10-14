@@ -1,4 +1,5 @@
-
+#include "ft_printf/ft_printf.h"
+#include "ft_printf/libft/libft.h"
 #include "push.h"
 
 // sa (swap a): Swap the first 2 elements at the top of stack a. Do nothing if there is only one or no elements.
@@ -45,32 +46,13 @@ t_stack	*ft_newnode(int nb, t_stack *prev)
 {
 	t_stack	*list;
 
-	list = (t_stack *)malloc(sizeof(*list));
+	list = malloc(sizeof(t_stack));
 	if (!list)
 		return (NULL);
 	list->nb = nb;
 	list->next = NULL;
     list->prev = prev;
-	if(!prev)
-		list->id = 1;
-	else
-		list->id = list->prev->id + 1;
 	return (list);
-}
-
-void	ft_nodeadd_back(t_stack **lst, t_stack *new)
-{
-	t_stack	*lastnode;
-
-	if (*lst)
-	{
-		lastnode = ft_nodelast(*lst);
-		lastnode->next = new;
-		lastnode->prev = ft_nodelast(*lst);
-		(*lst)->next = lastnode;
-	}
-	else
-		lst = &new;
 }
 
 t_stack	*ft_nodelast(t_stack *lst)
@@ -85,155 +67,291 @@ t_stack	*ft_nodelast(t_stack *lst)
 	return (lastnode);
 }
 
-void	ft_nodeiter(t_stack *lst, void (*f)(int))
+t_stack	*getfirstnode(t_stack *stack)
 {
-	t_stack	*node;
-
-	node = lst;
-	if (!f || !node)
-		return ;
-	while (node->next)
-	{
-		f(node->nb);
-		node = node->next;
-	}
-	if (!node->next)
-		f(node->nb);
+	while (stack->prev)
+		stack = stack->prev;
+	return stack;
 }
 
-void	ft_nodeitermod(t_stack *lst, void (*f)(t_stack*, t_stack*))
+void	sa(t_stack **stack)
 {
-	t_stack	*node;
+	t_stack	*tmp;
+	t_stack *tmp2;
+	t_stack	*lastnode;
 
-	node = lst;
-	if (!f || !node)
-		return ;
-	while (node->next)
-	{
-		f(node->next, node->prev);
-		node = node->next;
-	}
-		// if(!node->next)
-		//     f(node->next, node->prev);
-}
-
-// node1 <-> tmpnode <-> lstnode ->
-// visualize this on ipad. start at node1 and initialize the next node. lstnode change prev and next, tmpnode change prev.
-
-void sa(t_stack *stack)
-{
-	t_stack *lastnode;
-	t_stack *tmpnode;
-	t_stack *tmpnode2;
-
-	int tmp;
-
-	lastnode = ft_nodelast(stack);	// 1 2
+	if (ft_nodesize(*stack) == 1)
+		return;
+	lastnode = ft_nodelast(*stack);
+	tmp = ft_newnode(0, NULL);
+	tmp2 = ft_newnode(0, NULL);
+	tmp = lastnode->prev;
 	if (lastnode->prev->prev)
 	{
-		tmpnode = lastnode->prev->prev;
-		tmpnode2 = lastnode->prev;
-		printf("%d\n%p,\n%p\n", tmpnode->nb, tmpnode2->next, lastnode);
-		tmpnode->next = lastnode;
-		printf("%p\n%p,\n%p", tmpnode->next, tmpnode2->next, lastnode);
-		lastnode->prev = tmpnode->prev;
-		tmpnode->next = tmpnode2;
-		tmpnode2->prev = tmpnode;
+		tmp2 = lastnode->prev->prev;
+		tmp2->next = lastnode;
+		lastnode->prev = tmp2;
+		lastnode->next = tmp;
 	}
 	else
-		lastnode->prev;				//1
-
-
-	// lastnode->prev = lastnode;	//2 2
-	// lastnode = tmpnode;	//2 1
+	{
+	lastnode->prev = NULL;
+	lastnode->next = tmp;
+	}
+	tmp->prev = lastnode;
+	tmp->next = NULL;
+	*stack = getfirstnode(*stack);
+	ft_printf("sa\n");
 }
 
-void	ra(t_stack *stack)
+void	ra(t_stack **stack)
+{
+	t_stack	*lastnode;
+	t_stack *tmp;
+	t_stack *tmp2;
+
+	if (ft_nodesize(*stack) < 3)
+	{
+		sa(stack);
+		return;
+	}
+	tmp = ft_newnode(0, NULL);
+	tmp = *stack;
+	lastnode = ft_nodelast(*stack);
+	tmp2 = lastnode->prev;
+	lastnode->prev = NULL;
+	lastnode->next = tmp;
+	tmp->prev = lastnode;
+	tmp2->next = NULL;
+	*stack = lastnode;
+	ft_printf("ra\n");
+}
+
+void	rra(t_stack **stack)
+{
+	t_stack	*lastnode;
+	t_stack *tmp;
+	t_stack *tmp2;
+
+	if (ft_nodesize(*stack) < 3)
+	{
+		sa(stack);
+		return;
+	}
+	tmp = ft_newnode(0, NULL);
+	tmp = *stack;
+	lastnode = ft_nodelast(*stack);
+	tmp2 = tmp->next;
+	tmp->prev = lastnode;
+	tmp->next = NULL;
+	lastnode->next = tmp;
+	tmp2->prev = NULL;
+	*stack = tmp2;
+	ft_printf("rra\n");
+}
+
+void	push(t_stack **stack, t_stack *node)
+{
+	t_stack	*lastnode;
+
+	if (!*stack)
+	{
+		*stack = node;
+		return;
+	}
+	lastnode = ft_nodelast(*stack);
+	lastnode->next = node;
+	node->next = NULL;
+	node->prev = lastnode;
+
+
+}
+
+void	pb(t_stack **stacka, t_stack **stackb)
 {
 	t_stack *lastnode;
-	int tmp;
+	t_stack *tmp;
 
-	// tmp = stack->nb;
-	// lastnode = ft_nodelast(stack);	// 1 2 3
-	// stack->nb = lastnode->nb;
-	tmp = stack->nb;
-	lastnode = stack;
-	while (lastnode->next)
+	if (!*stacka)
+		return;
+	lastnode = ft_nodelast(*stacka);
+	if (ft_nodesize(*stacka) > 1)
 	{
-		lastnode->nb = lastnode->next->nb;
-		lastnode = lastnode->next;
+		tmp = lastnode->prev;
+		tmp->next = NULL;
 	}
-	lastnode->nb = tmp;
+	else
+	{
+		push(stackb, lastnode);
+		*stacka = NULL;
+		return;
+	}
+	lastnode->next = NULL;
+	lastnode->prev = NULL;
+	push(stackb, lastnode);
+	ft_printf("pb\n");
 }
 
-void	rr(t_stack *stack)
+void	pa(t_stack **stacka, t_stack **stackb)
 {
 	t_stack *lastnode;
-	int tmp;
+	t_stack *tmp;
 
-	lastnode = ft_nodelast(stack);
-	tmp = lastnode->nb;
-	while (lastnode->prev)
+	if (!*stackb)
+		return;
+	lastnode = ft_nodelast(*stackb);
+
+
+	if (ft_nodesize(*stackb) > 1)
 	{
-		lastnode->nb = lastnode->prev->nb;
-		lastnode = lastnode->prev;
+		tmp = lastnode->prev;
+		tmp->next = NULL;
 	}
-	stack->nb = tmp;
-	lastnode = ft_nodelast(stack);
+	else
+	{
+		push(stacka, lastnode);
+		*stackb = NULL;
+		return;
+	}
+	lastnode->next = NULL;
+	lastnode->prev = NULL;
+	push(stacka, lastnode);
+	ft_printf("pa\n");
 }
 
-int	pb(t_stack **stacka, t_stack **stackb)
+int	biggestindex(t_stack **stack)
 {
-	t_stack *node;
-	t_stack *tmp;
-	
-	if (!(*stackb))
+	t_stack	*node;
+	int		biggest;
+	int		i;
+	int		j;
+
+	i = 1;
+	j = 1;
+	node = *stack;
+	biggest = node->nb;
+	while (node)
 	{
-		node = ft_nodelast(*stacka);
-		tmp = ft_newnode(node->nb, NULL);
-		*stackb = tmp;
-		node = node->prev;
-		node->next = NULL;
-	}
-	else{
-		node = ft_nodelast(*stacka);
-		tmp = ft_nodelast(*stackb);
-		tmp->next = ft_newnode(node->nb, tmp);
-		if(!node->prev)
-			*stacka = NULL;
-		else
+		if (biggest < node->nb)
 		{
-			node = node->prev;
-			node->next = NULL;
+			j = i;
+			biggest = node->nb;
+		}
+		i++;
+		node = node->next;
+	}
+	return (j);
+}
+
+int	smallestindex(t_stack **stack)
+{
+	t_stack	*node;
+	int		smallest;
+	int		i;
+	int		j;
+
+	i = 1;
+	j = 1;
+	node = *stack;
+	smallest = node->nb;
+	while (node)
+	{
+		if (smallest > node->nb)
+		{
+			j = i;
+			smallest = node->nb;
+		}
+		i++;
+		node = node->next;
+	}
+	return (j);
+}
+
+void	getBiggestNbToTop(t_stack **stack, int index)
+{
+	int	top;
+	int	nodesize;
+	int	i;
+
+	nodesize = ft_nodesize(*stack);
+	if (index == nodesize)
+		return;
+	if (nodesize / 2 >= index)
+	{
+		// printf("i = %d, nodesize = %d, index = %d\n", i, nodesize, index);
+		while (index)
+		{
+			rra(stack);
+			index--;
 		}
 	}
-	return 1;
-}
-
-int	pa(t_stack **stackb, t_stack **stacka)
-{
-	t_stack *node;
-	t_stack *tmp;
-	
-	if (!(*stackb))
+	else
 	{
-		node = ft_nodelast(*stacka);
-		tmp = ft_newnode(node->nb, NULL);
-		*stackb = tmp;
-		node = node->prev;
-		node->next = NULL;
-	}
-	else{
-		node = ft_nodelast(*stacka);
-		tmp = ft_nodelast(*stackb);
-		tmp->next = ft_newnode(node->nb, tmp);
-		if(!node->prev)
-			*stacka = NULL;
-		else
+		i = nodesize - index;
+		// printf("i = %d, nodesize = %d, index = %d\n", i, nodesize, index);
+		while (i)
 		{
-			node = node->prev;
-			node->next = NULL;
+			ra(stack);
+			i--;
 		}
 	}
-	return 1;
 }
+
+void	getsmallestnbtotop(t_stack **stack, int index)
+{
+	int	top;
+	int	nodesize;
+	int	i;
+
+	nodesize = ft_nodesize(*stack);
+	if (index == nodesize)
+		return;
+	if (nodesize / 2 >= index)
+	{
+		// printf("i = %d, nodesize = %d, index = %d\n", i, nodesize, index);
+		while (index)
+		{
+			rra(stack);
+			index--;
+		}
+	}
+	else
+	{
+		i = nodesize - index;
+		// printf("i = %d, nodesize = %d, index = %d\n", i, nodesize, index);
+		while (i)
+		{
+			ra(stack);
+			i--;
+		}
+	}
+}
+
+
+char	*concatargs(char **args, int argc)
+{
+	int		i;
+	int		len;
+	char	*str;
+	int		j;
+
+	i = 0;
+	len = 0;
+	str = "";
+	while (++i != argc)
+		len += ft_strlen(args[i]);
+	len += argc - 1;
+	str = malloc(len);
+	j = 0;
+	len = 0;
+	while (++j < argc)
+	{
+		i = -1;
+		while(args[j][++i])
+			str[len++] = args[j][i];
+		str[len++] = ' ';
+	}
+	str[--len] = '\0';
+	return (str);
+}
+

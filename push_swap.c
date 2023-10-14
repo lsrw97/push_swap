@@ -5,169 +5,86 @@
 
 
 #include <stdio.h>
-#include "libft/libft.h"
+#include "ft_printf/ft_printf.h"
+#include "ft_printf/libft/libft.h"
 #include "push.h"
 
-void iter(t_stack* next, t_stack* prev)
+t_stack *createstack(char **arr, int size)
 {
-	printf("next: %d, prev: %d\n", next->nb, prev->nb);
-}
-
-t_stack *findbiggestnumber(t_stack *node){
-	int num;
+	t_stack *stack;
 	t_stack *tmp;
-	t_stack *biggest;
-
-	if(!node)
-		return (NULL);
-	if(!node->next)
-		return (node);
-	tmp = node;
-	biggest = node;
-	num = tmp->nb;
-	while(tmp)
-	{
-		if(tmp->nb > num)
-			{
-				num = tmp->nb;
-				biggest = tmp;
-			}
-		tmp = tmp->next;
-	}
-	return (biggest);
-}
-
-int	checkdoubles(t_stack *node)
-{
-	int	nb;
-	t_stack *current;
-	t_stack *index;
-
-	current = node;
-	index = node->next;
-	while(current)
-	{
-		nb = current->nb;
-		while(index)
-		{
-			if(nb == index->nb)
-				return (0);
-			index = index->next;
-		}
-		current = current->next;
-	}
-	return (1);
-}
-
-t_stack *createstack(char *arr, int size)
-{
-	t_stack *node;
-	t_stack *nodetmp;
+	char	**split;
 	int		i;
 
-	if(!size)
-	return NULL;
-	i = 2;
-
-	node = ft_newnode(ft_atoi(arr[1]), NULL);
-	if (arr[2])
+	i = -1;
+	if (size == 0)
+		return NULL;
+	split = ft_split(concatargs(arr, size), ' ');
+	if (!checkfornan(split) || !checkforinteger(split))
+		return NULL;
+	size = arglen(split);
+	stack = ft_newnode(ft_atoi(split[--size]), NULL);
+	tmp = stack;
+	while(--size >= 0)
 	{
-	node->next = ft_newnode(ft_atoi(arr[2]), node);
-	nodetmp = node->next;
+		tmp->next = ft_newnode(ft_atoi(split[size]), tmp);
+		tmp = tmp->next;
 	}
-	else
-		return node;
-	while (++i < size)
-	{
-		nodetmp->next = ft_newnode(ft_atoi(arr[i]), nodetmp);
-		nodetmp = nodetmp->next;
-	}
-	return node;
+	if (!checkfordoubles(stack))
+		return NULL;
+	return stack;
 }
 
 int main (int argc, char *args[])
 {
-	// t_stack **stacka;
-	// t_stack **stackb;
-	// t_stack *nodea;
-	// t_stack *nodeb;
-	// t_stack *nodetmp;
+	t_stack	*stack_a;
+	t_stack *stack_b;
+	int		*pos;
 
-	struct t_stack stacka;
-	t_stack *start;
+	stack_a = createstack(args, argc);
+	stack_b = NULL;
+	if (!stack_a)
+		return 0;
+
+while(*(&stack_a))
+{
+	getsmallestnbtotop(&stack_a, smallestindex(&stack_a));
+	pb(&stack_a, &stack_b);
+}
+while(*(&stack_b))
+	pa(&stack_a, &stack_b);
 
 
-	start = &stacka;
-
-	stacka.nb = 2;
-	start->nb = 4;
-
-	// printf("%d, start: %p", stacka.nb, start);
-
-	start->next = ft_newnode(5, start);
-
-	printf("%p", stacka.next);
-
-	// if (argc < 2)
+	// while(stack_a)
 	// {
-	// 	printf("list must contain at least one element!");
-	// 	return 0;
+	// 	printf("stacka: %d\n", stack_a->nb);
+	// 	stack_a = stack_a->next;
 	// }
-	// nodea = (createstack(args, argc));
-	// stacka = &nodea;
-	// nodeb = (createstack(args, 0));
-	// stackb = &nodeb;
-	// nodetmp = nodea;
-	// 	// pb(stacka, stackb);
-	// sa(*stacka);
+	// while(stack_b)
+	// {
+	// 	printf("\nstackb: %d", stack_b->nb);
+	// 	stack_b = stack_b->next;
+	// }
 
-	// // printf("B(0) %d\n", (*stacka)->nb);
-	// printf("A(1) %d\n", (*stacka)->nb);
-	// printf("A(2) %d\n", (*stacka)->next->nb);
-	// printf("A(3) %d\n", (*stacka)->next->next->nb);
+	
+	// char	**split;
+	// int 	i = -1;
 
+	// split = NULL;
+	// split = ft_split(concatargs(args, argc), ' ');
+	// // printf("%d\n\n", checkfornan(concatargs(args, argc)));
+	
+	// // while(split[++i])
+	// // 	printf("split: %s\n", split[i]);
+	// t_stack *stack = createstack(split, arglen(split));
+	
 
-
-	// printf("Biggest Number: %d\n", findbiggestnumber((*stacka))->nb);
-	// printf(" %d\n", checkdoubles((*stacka)));
-	// printf(" %p\n", (*stackb));
-
-
-// 		while(1){
-		// pb(stacka, stackb);
-// 		pb(stacka, stackb);
-// 		if(ft_nodesize(*stacka) == 1)
-// 		{
-// 			nodea = NULL;
-// 			break;
-// 		}
-// }
-
-// algorithm
-
-// while(*stacka)
-// {
-// 	t_stack *node;
-// 	int	count;
-// 	int stacksize;
-
-// 	node = ft_newnode(1, NULL);
-
-
-// 	// nodea = NULL;
-// 	// printf("%p, %p\n", ft_nodelast((*stacka)), nodetmp);
- 
-// 	// pb(stacka, stackb);
-
-
-	// printf("(4) %d\n", (*stacka)->next->next->next->nb);
-	// printf("(5) %d\n", (*stacka)->next->next->next->next);
-// 	printf("(1a) %d\n", (*stackb)->nb);
-// 	while (nodea)
+	// sa(&stack);
+// while(stack)
 // 	{
-// 		printf("%d\n", nodea->nb);
-// 		nodea = nodea->next;
+// 		printf("\nstackb: %d", stack->nb);
+// 		stack = stack->next;
 // 	}
-// 	 return 0;
-// }
+
+	// printf("checkdoubles: %d\n", checkforinteger(sp lit));
 }

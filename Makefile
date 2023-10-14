@@ -1,11 +1,14 @@
-DIRLIB		= ./libft/
+DIRLIB		= ./ft_printf/ \
 
 SRCS	=	push_swap.c \
-			utilities.c
+			utilities.c \
+			checkers.c
 
 OBJS	= ${SRCS:.c=.o}
 
-LIBFT   = ./libft/libft.a
+LIBFT   = ./ft_printf/libft/libft.a
+
+PRINTF	= ./ft_printf/print.a
 
 NAME	= push.a
 
@@ -19,27 +22,31 @@ CFLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
 
 NAMELFT		= libft.a
 
+NAMEPRINT	= libftprintf.a
+
 all:	push_swap
 
 %.o: %.c
 	${CC} -c $< -o $@
 	
 push_swap:	${NAME}
-	${CC} push_swap.c ${NAME}  -fsanitize=address -g -o push_swap
-
-$(NAME):	$(OBJS) $(LIBFT)
+	${CC} push_swap.c ${NAME} -o push_swap -fsanitize=address -g
+# -fsanitize=address -g
+$(NAME):	$(OBJS) ${PRINTF}
 	ar rcs ${NAME} ${OBJS}
 
-$(LIBFT):
-	make -C ./libft
-	cp ./libft/libft.a $(NAME)
+$(PRINTF):
+	make -C ./ft_printf
+	cp ./ft_printf/libftprintf.a $(NAME)
 
 clean:
-	make clean -C ./libft
+	make clean -C ./ft_printf/libft
+	make clean -C ./ft_printf
 		$(RM) $(OBJS) $(BOBJ)
 
 fclean: clean
-	make fclean -C ./libft
+	make clean -C ./ft_printf/libft
+	make clean -C ./ft_printf
 	$(RM) $(NAME) $(OBJS) push_swap 
 
 re:			fclean all
