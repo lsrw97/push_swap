@@ -48,10 +48,9 @@ int	checkfornan(char **str)
 		{
 			if ((str[j][i] != 32 && str[j][i] != 0) && (str[j][i] < 47 || str[j][i] > 57))
 			{
-				if(str[j][i] == '-' && (str[j][i + 1] > 47 && str[j][i + 1] < 57))
-					continue;
-				ft_printf("ERRORNAN\n");
-				return 0;
+				if(str[j][i] != '-' && (str[j][i + 1] > 47 && str[j][i + 1] < 57))
+					{ft_printf("ERRORNAN\n%d", str[j][i]);
+					return 0;}
 			}
 		}
 		i = -1;

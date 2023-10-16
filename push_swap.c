@@ -39,52 +39,55 @@ int main (int argc, char *args[])
 {
 	t_stack	*stack_a;
 	t_stack *stack_b;
+	t_stack *node;
 	int		*pos;
 
 	stack_a = createstack(args, argc);
 	stack_b = NULL;
 	if (!stack_a)
 		return 0;
-
-while(*(&stack_a))
-{
-	getsmallestnbtotop(&stack_a, smallestindex(&stack_a));
+int i = 250;
+while(*(&stack_a->next->next->next))
+// while(--i)
 	pb(&stack_a, &stack_b);
-}
-while(*(&stack_b))
-	pa(&stack_a, &stack_b);
 
+// printf("small: %d\n", smallestindex(&stack_a));
+// printf("big: %d\n", biggestindex(&stack_a));
+sortthree(&stack_a);
+
+
+
+
+while (stack_b)
+{
+setpairs(&stack_a, &stack_b);
+setuppercostnode(&stack_b);
+setuppercostnode(&stack_a);
+node = findcheapest(stack_b);
+// printf("\ncheapest is: %d, fcosts: %d, stacka: %d, stackb: %d\n\n", node->nb, node->fcosts, stack_b->fnode->nb, stack_b->nb);
+// printf("%d\n", stack_b->nb);
+// printf("stack_a = %d\n", stack_a->nb);
+// rra(&stack_a, 1);
+sortmodesep(&stack_a, &stack_b, node);
+}
+
+getsmallestnbtotop(&stack_a, smallestindex(&stack_a));
+
+
+
+		// printf("stacka: %d, pair: %d\n", stack_a->nb, stack_a->pairnode);
 
 	// while(stack_a)
 	// {
-	// 	printf("stacka: %d\n", stack_a->nb);
+	// 	// printf("stacka: %d, pair: %d\n", stack_a->nb, stack_a->fnode->nb);
+	// 	printf("stacka: %d, cost: %d, isupper: %d, index: %d\n", stack_a->nb, stack_a->cost, stack_a->isupper, stack_a->index);
 	// 	stack_a = stack_a->next;
 	// }
 	// while(stack_b)
 	// {
-	// 	printf("\nstackb: %d", stack_b->nb);
+	// 	// printf("stackb: %d\n", stack_b->nb);
+	// 	printf("\nstackb: %d, pair: %d, cost: %d, isupper: %d, index: %d, fcosts: %d, smode: %d", stack_b->nb, stack_b->fnode->nb, stack_b->cost, stack_b->isupper, stack_b->index, stack_b->fcosts, stack_b->smode);
 	// 	stack_b = stack_b->next;
 	// }
-
-	
-	// char	**split;
-	// int 	i = -1;
-
-	// split = NULL;
-	// split = ft_split(concatargs(args, argc), ' ');
-	// // printf("%d\n\n", checkfornan(concatargs(args, argc)));
-	
-	// // while(split[++i])
-	// // 	printf("split: %s\n", split[i]);
-	// t_stack *stack = createstack(split, arglen(split));
-	
-
-	// sa(&stack);
-// while(stack)
-// 	{
-// 		printf("\nstackb: %d", stack->nb);
-// 		stack = stack->next;
-// 	}
-
-	// printf("checkdoubles: %d\n", checkforinteger(sp lit));
 }
+

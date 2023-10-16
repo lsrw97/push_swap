@@ -10,6 +10,13 @@
 typedef struct t_stack
 {
 	int             nb;
+	int				cost;
+	int				isupper;
+	int				fscore;
+	int				index;
+	int				fcosts;
+	int				smode;
+	struct t_stack	*fnode;
 	struct t_stack	*next;
 	struct t_stack	*prev;
 }	t_stack;
@@ -21,8 +28,12 @@ void	ft_nodeiter(t_stack *lst, void (*f)(int));
 t_stack	*ft_nodelast(t_stack *lst);
 void	ft_nodeitermod(t_stack *lst, void (*f)(t_stack*, t_stack*));
 void	sa(t_stack **stack);
-void	ra(t_stack **stack);
-void	rra(t_stack **stack);
+void	ra(t_stack **stack, int i);
+void	rra(t_stack **stack, int i);
+void	rb(t_stack **stack, int i);
+void	rrb(t_stack **stack, int i);
+void	rr(t_stack **stacka, t_stack **stackb);
+void	rrr(t_stack **stacka, t_stack **stackb);
 void	pb(t_stack **stacka, t_stack **stackb);
 void	push(t_stack **stack, t_stack *node);
 int	ft_nodesize(t_stack *lst);
@@ -37,6 +48,17 @@ int checkfordoubles(t_stack *stack);
 int	checkforinteger(char **split);
 int	smallestindex(t_stack **stack);
 void	getsmallestnbtotop(t_stack **stack, int index);
+int	friendscore(int num, int num2);
+void	setpairs(t_stack **stack_a, t_stack **stack_b);
+void	setuppercostnode(t_stack **stack);
+void	sortthree(t_stack **stack);
+t_stack	*findcheapest(t_stack *node);
+int realcost(t_stack *nodea, t_stack *nodeb);
+int cheapestcost(int i, int j, int x, t_stack *node);
+int	nodesizedown(t_stack *lst);
+void	sortmodesep(t_stack **stacka, t_stack **stackb, t_stack *node);
+void sortmodeup(t_stack **stacka, t_stack **stackb, t_stack *node);
+void sortmodedown(t_stack **stacka, t_stack **stackb, t_stack *node);
 
 
 #endif

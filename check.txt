@@ -46,3 +46,13 @@ curl -H "Authorization: Bearer c81ec563ee7514b3e174688f7165ac2c76848c371046b88b2
 
 
 {"access_token":"c81ec563ee7514b3e174688f7165ac2c76848c371046b88b20f10fb2da66078f","token_type":"bearer","expires_in":7200,"refresh_token":"db4dacb7ffffc9e25df9c66905d08ccad75d095618c86e42082bc005c2099a1c","scope":"public","created_at":1697208854,"secret_valid_until":1699630417}%                                                                                
+
+
+
+plan:
+
+we will expand the node struct and telleach node following:
+
+is it on the upper or the lower half
+the cost to get to the top 
+paired node
