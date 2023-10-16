@@ -7,7 +7,7 @@ int	arglen(char **args)
 	int	i;
 
 	i = 0;
-	while(args[i])
+	while (args[i])
 		i++;
 	return (i);
 }
@@ -42,20 +42,22 @@ int	checkfornan(char **str)
 
 	i = -1;
 	j = -1;
-	while(str[++j])
+	while (str[++j])
 	{
-		while(str[j][++i])
+		while (str[j][++i])
 		{
 			if ((str[j][i] != 32 && str[j][i] != 0) && (str[j][i] < 47 || str[j][i] > 57))
 			{
-				if(str[j][i] != '-' && (str[j][i + 1] > 47 && str[j][i + 1] < 57))
-					{ft_printf("ERRORNAN\n%d", str[j][i]);
-					return 0;}
+				if (str[j][i] != '-' && (str[j][i + 1] > 47 && str[j][i + 1] < 57))
+					{
+						ft_printf("ERRORNAN\n%d", str[j][i]);
+						return (0);
+					}
 			}
 		}
 		i = -1;
 	}
-	return 1;
+	return (1);
 }
 
 int checkfordoubles(t_stack *stack)
@@ -91,7 +93,7 @@ int	checkforinteger(char **split)
 		if (ft_atoi_mod(split[i]) > 2147483647 || ft_atoi_mod(split[i]) < -2147483648)
 		{
 			ft_printf("ERROR\n");
-			return 0;
+			return (0);
 		}
 	}
 	return (1);

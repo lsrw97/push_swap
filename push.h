@@ -52,13 +52,15 @@ int	friendscore(int num, int num2);
 void	setpairs(t_stack **stack_a, t_stack **stack_b);
 void	setuppercostnode(t_stack **stack);
 void	sortthree(t_stack **stack);
-t_stack	*findcheapest(t_stack *node);
+t_stack	*findcheapest(t_stack **stack);
 int realcost(t_stack *nodea, t_stack *nodeb);
 int cheapestcost(int i, int j, int x, t_stack *node);
 int	nodesizedown(t_stack *lst);
 void	sortmodesep(t_stack **stacka, t_stack **stackb, t_stack *node);
 void sortmodeup(t_stack **stacka, t_stack **stackb, t_stack *node);
 void sortmodedown(t_stack **stacka, t_stack **stackb, t_stack *node);
-
+void	updateindex(t_stack	**stack);
+void	sortmode(int i, t_stack **stacka, t_stack **stackb, t_stack *node);
+int	costmode(t_stack *nodea, t_stack *nodeb);
 
 #endif

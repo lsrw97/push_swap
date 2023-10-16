@@ -2,7 +2,8 @@ DIRLIB		= ./ft_printf/ \
 
 SRCS	=	push_swap.c \
 			utilities.c \
-			checkers.c
+			checkers.c  \
+			instructions.c
 
 OBJS	= ${SRCS:.c=.o}
 
@@ -18,7 +19,7 @@ AR		= ar rcs
 
 RM		= rm -rf
 
-CFLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS	= -Wall -Wextra -Werror
 
 NAMELFT		= libft.a
 
@@ -30,7 +31,7 @@ all:	push_swap
 	${CC} -c $< -o $@
 	
 push_swap:	${NAME}
-	${CC} push_swap.c ${NAME} -o push_swap -fsanitize=address -g
+	${CC} push_swap.c ${NAME} -o push_swap
 # -fsanitize=address -g
 $(NAME):	$(OBJS) ${PRINTF}
 	ar rcs ${NAME} ${OBJS}

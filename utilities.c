@@ -2,32 +2,6 @@
 #include "ft_printf/libft/libft.h"
 #include "push.h"
 
-// sa (swap a): Swap the first 2 elements at the top of stack a. Do nothing if there is only one or no elements.
-
-// sb (swap b): Swap the first 2 elements at the top of stack b. Do nothing if there is only one or no elements.
-
-// ss : sa and sb at the same time.
-
-// pa (push a): Take the first element at the top of b and put it at the top of a.
-// Do nothing if b is empty.
-
-// pb (push b): Take the first element at the top of a and put it at the top of b.
-// Do nothing if a is empty.
-
-// ra (rotate a): Shift up all elements of stack a by 1.
-// The first element becomes the last one.
-
-// rb (rotate b): Shift up all elements of stack b by 1. The first element becomes the last one.
-
-// rr : ra and rb at the same time.
-
-// rra (reverse rotate a): Shift down all elements of stack a by 1.
-// The last element becomes the first one.
-
-// rrb (reverse rotate b): Shift down all elements of stack b by 1. The last element becomes the first one.
-
-// rrr : rra and rrb at the same time.
-
 int	ft_nodesize(t_stack *lst)
 {
 	int	counter;
@@ -40,7 +14,6 @@ int	ft_nodesize(t_stack *lst)
 	}
 	return (counter);
 }
-
 
 t_stack	*ft_newnode(int nb, t_stack *prev)
 {
@@ -74,147 +47,6 @@ t_stack	*getfirstnode(t_stack *stack)
 	return stack;
 }
 
-void	sa(t_stack **stack)
-{
-	t_stack	*tmp;
-	t_stack *tmp2;
-	t_stack	*lastnode;
-
-	if (ft_nodesize(*stack) == 1)
-		return;
-	lastnode = ft_nodelast(*stack);
-	tmp = ft_newnode(0, NULL);
-	tmp2 = ft_newnode(0, NULL);
-	tmp = lastnode->prev;
-	if (lastnode->prev->prev)
-	{
-		tmp2 = lastnode->prev->prev;
-		tmp2->next = lastnode;
-		lastnode->prev = tmp2;
-		lastnode->next = tmp;
-	}
-	else
-	{
-	lastnode->prev = NULL;
-	lastnode->next = tmp;
-	}
-	tmp->prev = lastnode;
-	tmp->next = NULL;
-	*stack = getfirstnode(*stack);
-	ft_printf("sa\n");
-}
-
-void	ra(t_stack **stack, int i)
-{
-	t_stack	*lastnode;
-	t_stack *tmp;
-	t_stack *tmp2;
-
-	if (ft_nodesize(*stack) < 3)
-	{
-		sa(stack);
-		return;
-	}
-	tmp = ft_newnode(0, NULL);
-	tmp = *stack;
-	lastnode = ft_nodelast(*stack);
-	tmp2 = lastnode->prev;
-	lastnode->prev = NULL;
-	lastnode->next = tmp;
-	tmp->prev = lastnode;
-	tmp2->next = NULL;
-	*stack = lastnode;
-	if (i)
-		ft_printf("ra\n");
-}
-
-void	rra(t_stack **stack, int i)
-{
-	t_stack	*lastnode;
-	t_stack *tmp;
-	t_stack *tmp2;
-
-	if (ft_nodesize(*stack) < 3)
-	{
-		sa(stack);
-		return;
-	}
-	tmp = ft_newnode(0, NULL);
-	tmp = *stack;
-	lastnode = ft_nodelast(*stack);
-	tmp2 = tmp->next;
-	tmp->prev = lastnode;
-	tmp->next = NULL;
-	lastnode->next = tmp;
-	tmp2->prev = NULL;
-	*stack = tmp2;
-	if (i)
-		ft_printf("rra\n");
-}
-
-void	rb(t_stack **stack, int i)
-{
-	t_stack	*lastnode;
-	t_stack *tmp;
-	t_stack *tmp2;
-
-	if (ft_nodesize(*stack) < 3)
-	{
-		sa(stack);
-		return;
-	}
-	tmp = ft_newnode(0, NULL);
-	tmp = *stack;
-	lastnode = ft_nodelast(*stack);
-	tmp2 = lastnode->prev;
-	lastnode->prev = NULL;
-	lastnode->next = tmp;
-	tmp->prev = lastnode;
-	tmp2->next = NULL;
-	*stack = lastnode;
-	if (i)
-		ft_printf("rb\n");
-}
-
-void	rrb(t_stack **stack, int i)
-{
-	t_stack	*lastnode;
-	t_stack *tmp;
-	t_stack *tmp2;
-
-	if (ft_nodesize(*stack) < 3)
-	{
-		sa(stack);
-		return;
-	}
-	tmp = ft_newnode(0, NULL);
-	tmp = *stack;
-	lastnode = ft_nodelast(*stack);
-	tmp2 = tmp->next;
-	tmp->prev = lastnode;
-	tmp->next = NULL;
-	lastnode->next = tmp;
-	tmp2->prev = NULL;
-	*stack = tmp2;
-	if (i)
-		ft_printf("rrb\n");
-}
-
-void	rr(t_stack **stacka, t_stack **stackb)
-{
-	ra(stacka, 0);
-	rb(stackb, 0);
-	ft_printf("rr\n");
-}
-
-void	rrr(t_stack **stacka, t_stack **stackb)
-{
-	rra(stacka, 0);
-	rrb(stackb, 0);
-	ft_printf("rrr\n");
-}
-
-
 void	push(t_stack **stack, t_stack *node)
 {
 	t_stack	*lastnode;
@@ -222,14 +54,12 @@ void	push(t_stack **stack, t_stack *node)
 	if (!*stack)
 	{
 		*stack = node;
-		return;
+		return ;
 	}
 	lastnode = ft_nodelast(*stack);
 	lastnode->next = node;
 	node->next = NULL;
 	node->prev = lastnode;
-
-
 }
 
 void	pb(t_stack **stacka, t_stack **stackb)
@@ -238,7 +68,7 @@ void	pb(t_stack **stacka, t_stack **stackb)
 	t_stack *tmp;
 
 	if (!*stacka)
-		return;
+		return ;
 	lastnode = ft_nodelast(*stacka);
 	if (ft_nodesize(*stacka) > 1)
 	{
@@ -249,7 +79,8 @@ void	pb(t_stack **stacka, t_stack **stackb)
 	{
 		push(stackb, lastnode);
 		*stacka = NULL;
-		return;
+		ft_printf("pb\n");
+		return ;
 	}
 	lastnode->next = NULL;
 	lastnode->prev = NULL;
@@ -263,9 +94,8 @@ void	pa(t_stack **stacka, t_stack **stackb)
 	t_stack *tmp;
 
 	if (!*stackb)
-		return;
+		return ;
 	lastnode = ft_nodelast(*stackb);
-
 
 	if (ft_nodesize(*stackb) > 1)
 	{
@@ -276,7 +106,8 @@ void	pa(t_stack **stacka, t_stack **stackb)
 	{
 		push(stacka, lastnode);
 		*stackb = NULL;
-		return;
+		ft_printf("pa\n");
+		return ;
 	}
 	lastnode->next = NULL;
 	lastnode->prev = NULL;
@@ -340,10 +171,9 @@ void	getBiggestNbToTop(t_stack **stack, int index)
 
 	nodesize = ft_nodesize(*stack);
 	if (index == nodesize)
-		return;
+		return ;
 	if (nodesize / 2 >= index)
 	{
-		// printf("i = %d, nodesize = %d, index = %d\n", i, nodesize, index);
 		while (index)
 		{
 			rra(stack, 1);
@@ -353,7 +183,6 @@ void	getBiggestNbToTop(t_stack **stack, int index)
 	else
 	{
 		i = nodesize - index;
-		// printf("i = %d, nodesize = %d, index = %d\n", i, nodesize, index);
 		while (i)
 		{
 			ra(stack, 1);
@@ -370,10 +199,9 @@ void	getsmallestnbtotop(t_stack **stack, int index)
 
 	nodesize = ft_nodesize(*stack);
 	if (index == nodesize)
-		return;
+		return ;
 	if (nodesize / 2 >= index)
 	{
-		// printf("i = %d, nodesize = %d, index = %d\n", i, nodesize, index);
 		while (index)
 		{
 			rra(stack, 1);
@@ -383,7 +211,6 @@ void	getsmallestnbtotop(t_stack **stack, int index)
 	else
 	{
 		i = nodesize - index;
-		// printf("i = %d, nodesize = %d, index = %d\n", i, nodesize, index);
 		while (i)
 		{
 			ra(stack, 1);
@@ -412,7 +239,7 @@ char	*concatargs(char **args, int argc)
 	while (++j < argc)
 	{
 		i = -1;
-		while(args[j][++i])
+		while (args[j][++i])
 			str[len++] = args[j][i];
 		str[len++] = ' ';
 	}
@@ -422,10 +249,10 @@ char	*concatargs(char **args, int argc)
 
 int	isstorted(t_stack *stack)
 {
-	while(stack)
+	while (stack)
 	{
-		if(stack->next && stack->nb < stack->next->nb)
-			return 0;
+		if (stack->next && stack->nb < stack->next->nb)
+			return (0);
 		stack = stack->next;
 	}
 	return 1;
@@ -444,20 +271,20 @@ void	sortthree(t_stack **stack)
 			rra(stack, 1);
 		else if (smallestindex(stack) == 2 && biggestindex(stack) == 3)
 				ra(stack, 1);
-		else if(smallestindex(stack) == 2 && biggestindex(stack) == 1)
+		else if (smallestindex(stack) == 2 && biggestindex(stack) == 1)
 				sa(stack);
 		else
-			{
-				rra(stack, 1);
-				sa(stack);
-			}
+		{
+			rra(stack, 1);
+			sa(stack);
+		}
 	}
 }
 
 void	smallsort(t_stack *stack)
 {
-	if(ft_nodesize(stack) == 1)
-		return;
+	if (ft_nodesize(stack) == 1)
+		return ;
 	if (ft_nodesize(stack) == 2 && !isstorted(stack))
 		sa(&stack);
 	if (ft_nodesize(stack) == 3 && !isstorted(stack))
@@ -492,15 +319,24 @@ void	setpairs(t_stack **stack_a, t_stack **stack_b)
 	while (stackb)
 	{
 		setfriendnode(stacka, stackb);
+		diff = stacka->nb - stackb->nb;
 		while (stacka)
 		{
 			if (stacka->nb - stackb->nb > 0)
+			{
 				if(stackb->fscore < 0 || stacka->nb - stackb->nb < stackb->fscore)
+				{
 					setfriendnode(stacka, stackb);
-			// printf("----stacka: %d, stackb: %d, pair: %d\n",stacka->nb, stackb->nb, stackb->fscore);
+					diff = stacka->nb - stackb->nb;
+				}
+			}
+			else if (diff < 0 && diff > stacka->nb - stackb->nb)
+			{
+				setfriendnode(stacka, stackb);
+				diff = stacka->nb - stackb->nb;
+			}
 			stacka = stacka->next;
 		}
-		// printf("----stackb: %d, pair: %d\n", stackb->nb, stackb->fscore);
 		stacka = *stack_a;
 		stackb = stackb->next;
 	}
@@ -516,7 +352,6 @@ void	setuppercostnode(t_stack **stack)
 	node = ft_nodelast(*stack);
 	index = 0;
 	size = ft_nodesize(*stack);
-	// printf("size: %d\n", size);
 	while (node)
 	{
 		if (size / 2 >= index)
@@ -547,7 +382,6 @@ int	min(t_stack *a, t_stack *b)
 
 	sizea = nodesizedown(a);
 	sizeb = nodesizedown(b);
-	// printf("sizea: %d, sizeb: %d\n", sizea, sizeb);
 	if (sizea > sizeb)
 		return (sizea);
 	return (sizeb);
@@ -555,9 +389,9 @@ int	min(t_stack *a, t_stack *b)
 
 int mincost(int i, int j, int x)
 {
-	if (i > j && i > x)
+	if (i < j && i < x)
 		return 1;
-	else if (j > i && j > x)
+	else if (j < i && j < x)
 		return 2;
 	else
 		return 3;
@@ -580,15 +414,15 @@ int cheapestcost(int i, int j, int x, t_stack *node)
 	if (i <= j && i <= x)
 	{
 		node->smode = 1;
-		return i;
+		return (i);
 	}
 	else if (j <= i && j <= x)
 	{
 		node->smode = 2;
-		return j;
+		return (j);
 	}
 	node->smode = 3;
-	return x;
+	return (x);
 }
 
 int realcost(t_stack *nodea, t_stack *nodeb)
@@ -600,30 +434,29 @@ int realcost(t_stack *nodea, t_stack *nodeb)
 	costseperate = nodea->cost + nodeb->cost; // 70 cost 3, 72 cost 
 	costup = max(nodea->index, nodeb->index);
 	costdown = min(nodea, nodeb);
-	// printf("costseperate: %d, costup: %d, costdown: %d, nodea: %d, nodeb: %d\n", nodea->cost + nodeb->cost, max(nodea->index, nodeb->index), min(nodea, nodeb), nodea->nb, nodeb->nb);
 	nodeb->fcosts = cheapestcost(costseperate, costup, costdown, nodeb);
 	return (nodeb->fcosts);
 }
 
-t_stack	*findcheapest(t_stack *node)
+t_stack	*findcheapest(t_stack **stack)
 {
 	int	cheapest;
 	int tmp;
 	t_stack	*cnode;
+	t_stack *node;
 
+	node = *stack;
 	cnode = node;
 
-	cheapest = realcost(cnode->fnode, cnode);
+	cheapest = realcost(node->fnode, node);
 	while (node)
 	{
-		// printf("node->fnode->cost: %d, node->cost: %d\n", node->fnode->cost, node->cost);
 		tmp = realcost(node->fnode, node);
 		if (tmp < cheapest)
 		{
 			cheapest = tmp;
 			cnode = node;
 		}
-		// printf("cheapest: %d\n", cheapest);
 		node = node->next;
 	}
 	return (cnode);
@@ -687,91 +520,112 @@ void	sortmodesep(t_stack **stacka, t_stack **stackb, t_stack *node)
 	t_stack *fnode;
 
 	fnode = node->fnode;
-	// printf("fnode: %d\n", fnode->nb);
 	sortbycosta(stacka, fnode);
 	sortbycostb(stackb, node);
 	pa(stacka, stackb);
 }
 
-void sortmodeup(t_stack **stacka, t_stack **stackb, t_stack *node)
-{
-	t_stack *fnode;
-	int		sizea;
-	int		sizeb;
+// void sortmodeup(t_stack **stacka, t_stack **stackb, t_stack *node)
+// {
+// 	t_stack *fnode;
+// 	int		sizea;
+// 	int		sizeb;
 
-	fnode = node->fnode;
-	sizea = ft_nodesize(fnode) - 1;
-	sizeb = ft_nodesize(node) - 1;
-	// printf("sizea: %d, sizeb: %d\n", sizea, sizeb);
-	if (sizea <= sizeb)
+// 	fnode = node->fnode;
+// 	sizea = ft_nodesize(fnode) - 1;
+// 	sizeb = ft_nodesize(node) - 1;
+// 	if (sizea <= sizeb)
+// 	{
+// 		while (sizea)
+// 		{
+// 			rr(stacka, stackb);
+// 			sizea--;
+// 			sizeb--;
+// 		}
+// 		while (sizeb)
+// 		{
+// 			rb(stackb, 1);
+// 			sizeb--;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		while (sizeb)
+// 		{
+// 			rr(stacka, stackb);
+// 			sizea--;
+// 			sizeb--;		
+// 		}
+// 		while (sizea)
+// 		{
+// 			ra(stacka, 1);
+// 			sizea--;
+// 		}
+// 	}
+// 	pa(stacka, stackb);
+// }
+
+// void sortmodedown(t_stack **stacka, t_stack **stackb, t_stack *node)
+// {
+// 	t_stack *fnode;
+// 	int		sizea;
+// 	int		sizeb;
+
+// 	fnode = node->fnode;
+// 	sizea = nodesizedown(fnode);
+// 	sizeb = nodesizedown(node);
+// 	if (sizea <= sizeb)
+// 	{
+// 		while (sizea)
+// 		{
+// 			rrr(stacka, stackb);
+// 			sizea--;
+// 			sizeb--;
+// 		}
+// 		while (sizeb)
+// 		{
+// 			rrb(stackb, 1);
+// 			sizeb--;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		while (sizeb)
+// 		{
+// 			rrr(stacka, stackb);
+// 			sizea--;
+// 			sizeb--;		
+// 		}
+// 		while (sizea)
+// 		{
+// 			rra(stacka, 1);
+// 			sizea--;
+// 		}
+// 	}
+// 	pa(stacka, stackb);
+// }
+
+void	updateindex(t_stack	**stack)
+{
+	t_stack	*node;
+	int	i;
+
+	i = 0;
+	node = *stack;
+	while (node)
 	{
-		while (sizea)
-		{
-			rr(stacka, stackb);
-			sizea--;
-			sizeb--;
-		}
-		while (sizeb)
-		{
-			rb(stackb, 1);
-			sizeb--;
-		}
+		node->index = i;
+		i++;
+		node = node->next;
 	}
-	else
-	{
-		while (sizeb)
-		{
-			rr(stacka, stackb);
-			sizea--;
-			sizeb--;		
-		}
-		while (sizea)
-		{
-			ra(stacka, 1);
-			sizea--;
-		}
-	}
-	pa(stacka, stackb);
 }
 
-void sortmodedown(t_stack **stacka, t_stack **stackb, t_stack *node)
-{
-	t_stack *fnode;
-	int		sizea;
-	int		sizeb;
-
-	fnode = node->fnode;
-	sizea = nodesizedown(fnode);
-	sizeb = nodesizedown(node);
-	// printf("sizea: %d, sizeb: %d\n", sizea, sizeb);
-	if (sizea <= sizeb)
-	{
-		while (sizea)
-		{
-			rrr(stacka, stackb);
-			sizea--;
-			sizeb--;
-		}
-		while (sizeb)
-		{
-			rrb(stackb, 1);
-			sizeb--;
-		}
-	}
-	else
-	{
-		while (sizeb)
-		{
-			rrr(stacka, stackb);
-			sizea--;
-			sizeb--;		
-		}
-		while (sizea)
-		{
-			rra(stacka, 1);
-			sizea--;
-		}
-	}
-	pa(stacka, stackb);
-}
-
+// void	sortmode(int i, t_stack **stacka, t_stack **stackb, t_stack *node)
+// {
+// 	if (i == 1)
+// 		sortmodesep(stacka, stackb, node);
+// 	else if (i == 2)
+// 		sortmodeup(stacka, stackb, node);
+// 	else
+// 		sortmodedown(stacka, stackb, node);
+// }
