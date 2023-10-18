@@ -25,7 +25,7 @@ NAMELFT		= libft.a
 
 all:		${NAME}
 
-# %.o: %.c
+# %.o: %.c 
 # 	${CC} ${CFLAGS} -c -I. -I${DIRLIB} $< -o ${<:.c=.o}
 
 $(NAME):	$(OBJ) $(LIBFT)

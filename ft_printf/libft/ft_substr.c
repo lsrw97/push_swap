@@ -6,7 +6,7 @@
 /*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 17:42:41 by eelisaro          #+#    #+#             */
-/*   Updated: 2022/11/29 20:22:53 by eelisaro         ###   ########.fr       */
+/*   Updated: 2023/10/17 12:49:47 by eelisaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (len + start < ft_strlen(s))
 		substr = malloc(len + 1);
 	else
-	substr = malloc(ft_strlen(s) - start + 1);
+		substr = malloc(ft_strlen(s) - start + 1);
 	if (!substr)
 		return (NULL);
 	while ((size_t)++i < len && s[start] && len)

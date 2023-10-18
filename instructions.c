@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   instructions.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/17 11:53:16 by eelisaro          #+#    #+#             */
+/*   Updated: 2023/10/17 21:22:39 by eelisaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf/ft_printf.h"
 #include "ft_printf/libft/libft.h"
 #include "push.h"
@@ -5,14 +17,12 @@
 void	sa(t_stack **stack)
 {
 	t_stack	*tmp;
-	t_stack *tmp2;
+	t_stack	*tmp2;
 	t_stack	*lastnode;
 
 	if (ft_nodesize(*stack) == 1)
-		return;
+		return ;
 	lastnode = ft_nodelast(*stack);
-	tmp = ft_newnode(0, NULL);
-	tmp2 = ft_newnode(0, NULL);
 	tmp = lastnode->prev;
 	if (lastnode->prev->prev)
 	{
@@ -23,8 +33,8 @@ void	sa(t_stack **stack)
 	}
 	else
 	{
-	lastnode->prev = NULL;
-	lastnode->next = tmp;
+		lastnode->prev = NULL;
+		lastnode->next = tmp; 
 	}
 	tmp->prev = lastnode;
 	tmp->next = NULL;
@@ -35,14 +45,12 @@ void	sa(t_stack **stack)
 void	sb(t_stack **stack)
 {
 	t_stack	*tmp;
-	t_stack *tmp2;
+	t_stack	*tmp2;
 	t_stack	*lastnode;
 
 	if (ft_nodesize(*stack) == 1)
-		return;
+		return ;
 	lastnode = ft_nodelast(*stack);
-	tmp = ft_newnode(0, NULL);
-	tmp2 = ft_newnode(0, NULL);
 	tmp = lastnode->prev;
 	if (lastnode->prev->prev)
 	{
@@ -53,8 +61,8 @@ void	sb(t_stack **stack)
 	}
 	else
 	{
-	lastnode->prev = NULL;
-	lastnode->next = tmp;
+		lastnode->prev = NULL;
+		lastnode->next = tmp;
 	}
 	tmp->prev = lastnode;
 	tmp->next = NULL;
@@ -65,15 +73,14 @@ void	sb(t_stack **stack)
 void	ra(t_stack **stack, int i)
 {
 	t_stack	*lastnode;
-	t_stack *tmp;
-	t_stack *tmp2;
+	t_stack	*tmp;
+	t_stack	*tmp2;
 
 	if (ft_nodesize(*stack) < 3)
 	{
 		sa(stack);
-		return;
+		return ;
 	}
-	tmp = ft_newnode(0, NULL);
 	tmp = *stack;
 	lastnode = ft_nodelast(*stack);
 	tmp2 = lastnode->prev;
@@ -89,15 +96,14 @@ void	ra(t_stack **stack, int i)
 void	rra(t_stack **stack, int i)
 {
 	t_stack	*lastnode;
-	t_stack *tmp;
-	t_stack *tmp2;
+	t_stack	*tmp;
+	t_stack	*tmp2;
 
 	if (ft_nodesize(*stack) < 3)
 	{
 		sa(stack);
-		return;
+		return ;
 	}
-	tmp = ft_newnode(0, NULL);
 	tmp = *stack;
 	lastnode = ft_nodelast(*stack);
 	tmp2 = tmp->next;
@@ -113,15 +119,14 @@ void	rra(t_stack **stack, int i)
 void	rb(t_stack **stack, int i)
 {
 	t_stack	*lastnode;
-	t_stack *tmp;
-	t_stack *tmp2;
+	t_stack	*tmp;
+	t_stack	*tmp2;
 
 	if (ft_nodesize(*stack) < 3)
 	{
 		sb(stack);
-		return;
+		return ;
 	}
-	tmp = ft_newnode(0, NULL);
 	tmp = *stack;
 	lastnode = ft_nodelast(*stack);
 	tmp2 = lastnode->prev;
@@ -132,42 +137,4 @@ void	rb(t_stack **stack, int i)
 	*stack = lastnode;
 	if (i)
 		ft_printf("rb\n");
-}
-
-void	rrb(t_stack **stack, int i)
-{
-	t_stack	*lastnode;
-	t_stack *tmp;
-	t_stack *tmp2;
-
-	if (ft_nodesize(*stack) < 3)
-	{
-		sb(stack);
-		return;
-	}
-	tmp = ft_newnode(0, NULL);
-	tmp = *stack;
-	lastnode = ft_nodelast(*stack);
-	tmp2 = tmp->next;
-	tmp->prev = lastnode;
-	tmp->next = NULL;
-	lastnode->next = tmp;
-	tmp2->prev = NULL;
-	*stack = tmp2;
-	if (i)
-		ft_printf("rrb\n");
-}
-
-void	rr(t_stack **stacka, t_stack **stackb)
-{
-	ra(stacka, 0);
-	rb(stackb, 0);
-	ft_printf("rr\n");
-}
-
-void	rrr(t_stack **stacka, t_stack **stackb)
-{
-	rra(stacka, 0);
-	rrb(stackb, 0);
-	ft_printf("rrr\n");
 }

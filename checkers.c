@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checkers.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eelisaro <eelisaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/17 11:45:21 by eelisaro          #+#    #+#             */
+/*   Updated: 2023/10/18 13:12:15 by eelisaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf/ft_printf.h"
 #include "ft_printf/libft/libft.h"
 #include "push.h"
@@ -35,7 +47,7 @@ long long	ft_atoi_mod(const char *nptr)
 	return ((num *= n));
 }
 
-int	checkfornan(char **str)
+int	checkfornan(char **str, char *str2)
 {
 	int	i;
 	int	j;
@@ -46,13 +58,17 @@ int	checkfornan(char **str)
 	{
 		while (str[j][++i])
 		{
-			if ((str[j][i] != 32 && str[j][i] != 0) && (str[j][i] < 47 || str[j][i] > 57))
+			if ((str[j][i] != 32 && str[j][i] != 0) &&
+			(str[j][i] < 47 || str[j][i] > 57))
 			{
-				if (str[j][i] != '-' && (str[j][i + 1] > 47 && str[j][i + 1] < 57))
-					{
-						ft_printf("ERRORNAN\n%d", str[j][i]);
-						return (0);
-					}
+				if (str[j][i] != '-' 
+					|| !(str[j][i + 1] > 47 && str[j][i + 1] < 57))
+				{
+					ft_printf("ERROR\n");
+					free(str2);
+					freesplit(str);
+					return (0);
+				}
 			}
 		}
 		i = -1;
@@ -60,7 +76,7 @@ int	checkfornan(char **str)
 	return (1);
 }
 
-int checkfordoubles(t_stack *stack)
+int	checkfordoubles(t_stack *stack)
 {
 	t_stack	*stack2;
 
@@ -68,12 +84,13 @@ int checkfordoubles(t_stack *stack)
 	stack = stack->next;
 	while (stack2->next)
 	{
-		while(stack)
+		while (stack)
 		{
-			if(stack->nb == stack2->nb)
+			if (stack->nb == stack2->nb)
 			{
 				ft_printf("ERROR\n");
-				return 0;
+				freestack(getfirstnode(stack));
+				return (0);
 			}
 			stack = stack->next;
 		}
@@ -83,18 +100,21 @@ int checkfordoubles(t_stack *stack)
 	return (1);
 }
 
-int	checkforinteger(char **split)
+int	checkforinteger(char **split, char *str)
 {
 	int	i;
 
 	i = -1;
 	while (split[++i])
 	{
-		if (ft_atoi_mod(split[i]) > 2147483647 || ft_atoi_mod(split[i]) < -2147483648)
+		if ((ft_atoi_mod(split[i]) > 2147483647)
+			|| (ft_atoi_mod(split[i]) < -2147483648))
 		{
 			ft_printf("ERROR\n");
+			free(str);
+			freesplit(split);
 			return (0);
 		}
 	}
 	return (1);
-} 
+}
